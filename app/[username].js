@@ -1,36 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
-import React from "react";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import {
-  getLogin,
-  getSemDetails,
-  getAttendanceDetails,
-  getTeacherName,
-} from "./api_attendance";
+import { getSemDetails, getAttendanceDetails } from "./api_attendance";
 
 const profile = () => {
-  const router = useRouter();
+  // const router = useRouter();
+  const { detailsLogin, username } = useSearchParams();
 
-  const { username, password } = useSearchParams();
-
-  const [detailsLogin, setDetailsLogin] = useState(null);
   const [detailsRegister, setDetailsRegister] = useState(null);
   const [detailsAttendance, setDetailsAttendance] = useState(null);
-  const [detailsExam, setDetailsExam] = useState(null);
+
+  if (detailsLogin) {
+    console.log("test " + detailsLogin.name);
+  }
 
   const handleSubmit = async () => {
-    const resultLogin = await getLogin(username, password);
-    setDetailsLogin(resultLogin);
-    console.log(resultLogin);
-
     const resultRegistration = await getSemDetails();
     // console.log(resultRegistration);
     setDetailsRegister(resultRegistration);
 
     const resultAttendace = await getAttendanceDetails();
-    console.log(resultAttendace);
+    // console.log(resultAttendace);
     setDetailsAttendance(resultAttendace);
   };
 
@@ -42,10 +33,6 @@ const profile = () => {
         <Stack.Screen
           options={{
             title: username,
-            /*           headerStyle: {
-            backgroundColor: "black",
-          },
-          headerTintColor: "#FFE030", */
           }}
         />
         <Button onPress={() => handleSubmit()} title="Get Attendance" />
@@ -57,7 +44,7 @@ const profile = () => {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: detailsLogin.name,
+          title: username,
           /*           headerStyle: {
             backgroundColor: "black",
           },

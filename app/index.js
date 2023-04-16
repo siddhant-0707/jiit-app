@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,6 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter, Link } from "expo-router";
+import { getLogin } from "./api_attendance";
+import { AntDesign } from "@expo/vector-icons";
 
 const Page = () => {
   const router = useRouter();
@@ -14,17 +16,28 @@ const Page = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-/*   const handleLogin = () => {
-    <Link
-      href={{
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [detailsLogin, setDetailsLogin] = useState(null);
+
+  const handleLogin = async () => {
+    setIsLoading(true); // set loading state to true before making API call
+    const resultLogin = await getLogin(username, password);
+    setDetailsLogin(resultLogin);
+    setIsLoading(false); // set loading state to false after API call completes
+
+    if (resultLogin) {
+      console.log("test1 " + resultLogin.name)
+      // only redirect if login details have been received
+      router.push({
         pathname: "/username",
-        params: { username: username, password: password },
-      }}
-      style={styles.link}
-    >
-      Open Profile
-    </Link>;
-  }; */
+        params: { detailsLogin: detailsLogin, username: username },
+      });
+    }
+
+    // router.push('/username', {detailsLogin, username});
+    // router.push(`${username}`, { detailsLogin, username });
+  };
 
   return (
     <View style={styles.container}>
@@ -32,7 +45,8 @@ const Page = () => {
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Username"
+          placeholderTextColor="#6d706e"
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
@@ -40,22 +54,22 @@ const Page = () => {
         <TextInput
           style={styles.input}
           placeholder="Password"
+          placeholderTextColor="#6d706e"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
       </View>
-      <TouchableOpacity style={styles.button}>
-        {/* <Text style={styles.buttonText}>Sign In</Text> */}
-        <Link
-          href={{
-            pathname: "/username",
-            params: { username: username, password: password },
-          }}
-          style={styles.buttonText}
-        >
-          Open Profile
-        </Link>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <AntDesign name="loading1" size={24} color="black" />
+        ) : (
+          <Text style={styles.buttonText}>Login</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -98,58 +112,3 @@ const styles = StyleSheet.create({
 });
 
 export default Page;
-
-/* import { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Link, Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-
-export default function Page() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.main}>
-        <Text style={styles.subtitle}>This is the first page of your app.</Text>
-
-        <Link
-          href={{
-            pathname: "/rambo",
-            params: { username: "21103140", password: "sarthak1995" },
-          }}
-          style={styles.link}
-        >
-          Open Siddhant's Profile
-        </Link>
-      </View>
-      <StatusBar style="dark" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    padding: 24,
-  },
-  main: {
-    flex: 1,
-    justifyContent: "center",
-    maxWidth: 960,
-    marginHorizontal: "auto",
-  },
-  title: {
-    fontSize: 64,
-    fontWeight: "bold",
-  },
-  subtitle: {
-    fontSize: 36,
-    color: "#38434D",
-  },
-  link: {
-    fontSize: 20,
-    marginVertical: 10,
-    fontWeight: "bold",
-    textDecorationStyle: "solid",
-  },
-});
- */
