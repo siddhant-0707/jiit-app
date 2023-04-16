@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
 import { Stack, useRouter, useSearchParams } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { getSemDetails, getAttendanceDetails } from "./api_attendance";
+import { getLogin, getSemDetails, getAttendanceDetails } from "./api_attendance";
 
 const profile = () => {
-  // const router = useRouter();
-  const { detailsLogin, username } = useSearchParams();
+  const router = useRouter();
+  const { username, password } = useSearchParams();
 
+  const [detailsLogin, setDetailsLogin] = useState(null);
   const [detailsRegister, setDetailsRegister] = useState(null);
   const [detailsAttendance, setDetailsAttendance] = useState(null);
 
@@ -16,6 +17,9 @@ const profile = () => {
   }
 
   const handleSubmit = async () => {
+    const resultLogin = await getLogin(username, password);
+    setDetailsLogin(resultLogin);
+
     const resultRegistration = await getSemDetails();
     // console.log(resultRegistration);
     setDetailsRegister(resultRegistration);
@@ -44,30 +48,30 @@ const profile = () => {
     <View style={styles.container}>
       <Stack.Screen
         options={{
-          title: username,
-          /*           headerStyle: {
-            backgroundColor: "black",
-          },
-          headerTintColor: "#FFE030", */
+          title: detailsLogin.name,
         }}
       />
-
-      <View style={styles.row}>
-        <Text style={styles.header}>Subject Code</Text>
-        <Text style={styles.header}>L T percentage</Text>
-        <Text style={styles.header}>L percentage</Text>
-        <Text style={styles.header}>P percentage</Text>
-        <Text style={styles.header}>T percentage</Text>
-      </View>
-      {data.map((data, index) => (
-        <View style={styles.row} key={index}>
-          <Text style={styles.cell}>{data.subjectcode}</Text>
-          <Text style={styles.cell}>{data.LTpercantage || "-"}</Text>
-          <Text style={styles.cell}>{data.Lpercentage || "-"}</Text>
-          <Text style={styles.cell}>{data.Ppercentage || "-"}</Text>
-          <Text style={styles.cell}>{data.Tpercentage || "-"}</Text>
+      <Text style={styles.title}>{username}'s Attendance</Text>
+      <ScrollView horizontal={false}>
+        <View style={styles.table}>
+          <View style={styles.row}>
+            <Text style={styles.header}>Subject Code</Text>
+            <Text style={styles.header}>L T percentage</Text>
+            <Text style={styles.header}>L percentage</Text>
+            <Text style={styles.header}>P percentage</Text>
+            <Text style={styles.header}>T percentage</Text>
+          </View>
+          {data.map((data, index) => (
+            <View style={styles.row} key={index}>
+              <Text style={styles.cell}>{data.subjectcode}</Text>
+              <Text style={styles.cell}>{data.LTpercantage || "-"}</Text>
+              <Text style={styles.cell}>{data.Lpercentage || "-"}</Text>
+              <Text style={styles.cell}>{data.Ppercentage || "-"}</Text>
+              <Text style={styles.cell}>{data.Tpercentage || "-"}</Text>
+            </View>
+          ))}
         </View>
-      ))}
+      </ScrollView>
     </View>
   );
 };

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, Link } from "expo-router";
 import { getLogin } from "./api_attendance";
 import { AntDesign } from "@expo/vector-icons";
@@ -27,17 +28,35 @@ const Page = () => {
     setIsLoading(false); // set loading state to false after API call completes
 
     if (resultLogin) {
-      console.log("test1 " + resultLogin.name)
+      console.log("test1 " + resultLogin.name);
       // only redirect if login details have been received
       router.push({
-        pathname: "/username",
-        params: { detailsLogin: detailsLogin, username: username },
+        pathname: `/username`,
+        params: { username: username, password: password },
       });
+      await AsyncStorage.setItem("username", username);
+      await AsyncStorage.setItem("password", password);
     }
 
     // router.push('/username', {detailsLogin, username});
     // router.push(`${username}`, { detailsLogin, username });
   };
+
+  // check if the user's login credentials are already stored in AsyncStorage
+  useEffect(() => {
+    const checkLogin = async () => {
+      const storedUsername = await AsyncStorage.getItem("username");
+      const storedPassword = await AsyncStorage.getItem("password");
+      if (storedUsername && storedPassword) {
+        // setUsername(storedUsername);
+        // setPassword(storedPassword);
+        router.push({
+          pathname: `/username`,
+          params: { username: storedUsername, password: storedPassword },
+        });
+      }
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
