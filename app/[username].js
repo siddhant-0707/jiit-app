@@ -1,108 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import { View, Text, Button, StyleSheet, ScrollView } from "react-native";
-import { Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useRouter, useSearchParams, Link } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { getLogin, getSemDetails, getAttendanceDetails } from "./api_attendance";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const profile = () => {
   const router = useRouter();
   const { username, password } = useSearchParams();
+  console.log("[username]" + username + " " + password);
 
-  const [detailsLogin, setDetailsLogin] = useState(null);
-  const [detailsRegister, setDetailsRegister] = useState(null);
-  const [detailsAttendance, setDetailsAttendance] = useState(null);
-
-  if (detailsLogin) {
-    console.log("test " + detailsLogin.name);
-  }
-
-  const handleSubmit = async () => {
-    const resultLogin = await getLogin(username, password);
-    setDetailsLogin(resultLogin);
-
-    const resultRegistration = await getSemDetails();
-    // console.log(resultRegistration);
-    setDetailsRegister(resultRegistration);
-
-    const resultAttendace = await getAttendanceDetails();
-    // console.log(resultAttendace);
-    setDetailsAttendance(resultAttendace);
+  const handleLogout = async () => {
+    // Clear user data from AsyncStorage
+    await AsyncStorage.clear();
+    // Navigate back to the login page
+    router.push("/");
   };
 
-  const data = detailsAttendance;
-
-  if (detailsAttendance === null) {
-    return (
-      <View>
-        <Stack.Screen
-          options={{
-            title: username,
-          }}
-        />
-        <Button onPress={() => handleSubmit()} title="Get Attendance" />
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.container}>
+    <View>
       <Stack.Screen
         options={{
-          title: detailsLogin.name,
+          title: username,
         }}
       />
-      <Text style={styles.title}>{username}'s Attendance</Text>
-      <ScrollView horizontal={false}>
-        <View style={styles.table}>
-          <View style={styles.row}>
-            <Text style={styles.header}>Subject Code</Text>
-            <Text style={styles.header}>L T percentage</Text>
-            <Text style={styles.header}>L percentage</Text>
-            <Text style={styles.header}>P percentage</Text>
-            <Text style={styles.header}>T percentage</Text>
-          </View>
-          {data.map((data, index) => (
-            <View style={styles.row} key={index}>
-              <Text style={styles.cell}>{data.subjectcode}</Text>
-              <Text style={styles.cell}>{data.LTpercantage || "-"}</Text>
-              <Text style={styles.cell}>{data.Lpercentage || "-"}</Text>
-              <Text style={styles.cell}>{data.Ppercentage || "-"}</Text>
-              <Text style={styles.cell}>{data.Tpercentage || "-"}</Text>
-            </View>
-          ))}
-        </View>
-      </ScrollView>
+      {/*       <Button onPress={() => handleAttendace()} title="View Attendance" />
+      <Button title="View Registered Subjects" />
+      <Button title="Logout" onPress={() => handleLogout()} /> */}
+      <Link
+        href={{
+          pathname: "/pages/attendance",
+          params: {
+            username: username,
+            password: password,
+          },
+        }}
+      >
+        View Attendance
+      </Link>
+      <Button title="View Registered Subjects" />
+      <Button title="Logout" onPress={() => handleLogout()} />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 10,
-    marginHorizontal: 5,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 10,
-  },
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
-    paddingVertical: 5,
-  },
-  header: {
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center",
-  },
-  cell: {
-    flex: 1,
-    textAlign: "center",
-  },
-});
+const styles = StyleSheet.create({});
 
 export default profile;

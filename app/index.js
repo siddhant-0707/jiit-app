@@ -48,6 +48,7 @@ const Page = () => {
       const storedUsername = await AsyncStorage.getItem("username");
       const storedPassword = await AsyncStorage.getItem("password");
       if (storedUsername && storedPassword) {
+        // console.log(storedUsername + " " + storedPassword);
         // setUsername(storedUsername);
         // setPassword(storedPassword);
         router.push({
@@ -56,6 +57,8 @@ const Page = () => {
         });
       }
     };
+
+    checkLogin();
   }, []);
 
   return (
