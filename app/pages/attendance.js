@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { Stack, useRouter, useSearchParams } from "expo-router";
+import { Stack, useSearchParams } from "expo-router";
 import {
   getLogin,
   getSemDetails,
@@ -21,18 +21,14 @@ const attendance = () => {
       setDetailsLogin(resultLogin);
 
       const resultRegistration = await getSemDetails();
-      // console.log(resultRegistration);
       setDetailsRegister(resultRegistration);
 
       const resultAttendace = await getAttendanceDetails();
-      // console.log(resultAttendace);
       setDetailsAttendance(resultAttendace);
     };
 
     fetchData();
   }, []);
-
-  // const data = detailsAttendance;
 
   return (
     <View>

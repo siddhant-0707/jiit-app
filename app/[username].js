@@ -7,7 +7,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const profile = () => {
   const router = useRouter();
   const { username, password } = useSearchParams();
-  console.log("[username]" + username + " " + password);
+  // console.log("[username]" + username + " " + password);
 
   const handleLogout = async () => {
     // Clear user data from AsyncStorage
@@ -37,7 +37,13 @@ const profile = () => {
       >
         View Attendance
       </Link>
-      <Button title="View Registered Subjects" />
+      <Link
+        href={{
+          pathname: "/pages/subjects",
+        }}
+      >
+        View Registered Subjects
+      </Link>
       <Button title="Logout" onPress={() => handleLogout()} />
     </View>
   );

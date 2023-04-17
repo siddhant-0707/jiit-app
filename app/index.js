@@ -28,7 +28,7 @@ const Page = () => {
     setIsLoading(false); // set loading state to false after API call completes
 
     if (resultLogin) {
-      console.log("test1 " + resultLogin.name);
+      // console.log("test1 " + resultLogin.name);
       // only redirect if login details have been received
       router.push({
         pathname: `/username`,
@@ -48,9 +48,6 @@ const Page = () => {
       const storedUsername = await AsyncStorage.getItem("username");
       const storedPassword = await AsyncStorage.getItem("password");
       if (storedUsername && storedPassword) {
-        // console.log(storedUsername + " " + storedPassword);
-        // setUsername(storedUsername);
-        // setPassword(storedPassword);
         router.push({
           pathname: `/username`,
           params: { username: storedUsername, password: storedPassword },
