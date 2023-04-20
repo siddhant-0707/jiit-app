@@ -36,11 +36,11 @@ const subjects = () => {
 
   return (
     <View>
-      {/*       <Stack.Screen
+      <Stack.Screen
         options={{
-          title: detailsLogin?.name || "Attendance",
+          title: "SUBJECTS",
         }}
-      /> */}
+      />
       {/* <Text style={styles.title}>{username}'s Attendance</Text> */}
       <Picker
         selectedValue={selectedRegistrationId}

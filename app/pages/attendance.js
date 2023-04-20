@@ -16,7 +16,7 @@ const attendance = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("attendance" + username + " " + password)
+      console.log("attendance" + username + " " + password);
       const resultLogin = await getLogin(username, password);
       setDetailsLogin(resultLogin);
 
@@ -42,7 +42,7 @@ const attendance = () => {
         <View style={styles.table}>
           <View style={styles.row}>
             <Text style={styles.header}>Subject Code</Text>
-            <Text style={styles.header}>L T percentage</Text>
+            <Text style={styles.header}>LT percentage</Text>
             <Text style={styles.header}>L percentage</Text>
             <Text style={styles.header}>P percentage</Text>
             <Text style={styles.header}>T percentage</Text>

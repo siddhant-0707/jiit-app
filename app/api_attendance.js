@@ -84,7 +84,7 @@ const getAttendanceDetails = async () => {
 
   try {
     const response = await axios(options);
-    console.log(response);
+    // console.log(response);
     return response.data.response.studentattendancelist;
   } catch (error) {
     console.error(error);

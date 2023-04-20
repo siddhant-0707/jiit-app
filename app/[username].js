@@ -40,6 +40,10 @@ const profile = () => {
       <Link
         href={{
           pathname: "/pages/subjects",
+          params: {
+            username: username,
+            password: password,
+          },
         }}
       >
         View Registered Subjects
