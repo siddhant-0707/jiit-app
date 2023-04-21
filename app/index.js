@@ -14,8 +14,8 @@ import { AntDesign } from "@expo/vector-icons";
 const Page = () => {
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
 
   const [isLoading, setIsLoading] = useState(false);
 
